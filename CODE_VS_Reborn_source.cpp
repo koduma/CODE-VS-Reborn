@@ -713,8 +713,6 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 		//}
 	}
 
-	/*
-
 	double avg[10][2] = { 0 };
 	double cnt[10] = { 0 };
 
@@ -727,8 +725,6 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 			}
 		}
 	}
-
-
 
 	double add = 0;
 
@@ -748,11 +744,9 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 		add += max(avg[i][1] - avg[10 - i][1], avg[10 - i][1] - avg[i][1]);
 	}
 
-	add *= 0.5;
+	add *= 0.1;
 
 	maxValue -= (int)add;
-
-	*/
 
 	return maxValue;
 }
