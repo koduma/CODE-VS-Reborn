@@ -27,31 +27,31 @@ using namespace std;
 
 typedef long long ll;
 
-#define MAX_TURN 500 // ƒQ[ƒ€‚ÌÅ‘åƒ^[ƒ“”
-#define FIELD_WIDTH 10 // ƒtƒB[ƒ‹ƒh‚Ì‰¡•
-#define FIELD_HEIGHT 16 // ƒtƒB[ƒ‹ƒh‚Ìc•
-#define WIDTH 12  // —]•ª‚È—Ìˆæ‚àŠÜ‚ß‚½ƒtƒB[ƒ‹ƒh‚Ì‰¡•
-#define HEIGHT 21 // —]•ª‚È—Ìˆæ‚àŠÜ‚ß‚½ƒtƒB[ƒ‹ƒh‚Ìc•
-#define DANGER_LINE 17 // ŠëŒ¯ƒ‰ƒCƒ“
+#define MAX_TURN 500 // ã‚²ãƒ¼ãƒ ã®æœ€å¤§ã‚¿ãƒ¼ãƒ³æ•°
+#define FIELD_WIDTH 10 // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æ¨ªå¹…
+#define FIELD_HEIGHT 16 // ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ç¸¦å¹…
+#define WIDTH 12  // ä½™åˆ†ãªé ˜åŸŸã‚‚å«ã‚ãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æ¨ªå¹…
+#define HEIGHT 21 // ä½™åˆ†ãªé ˜åŸŸã‚‚å«ã‚ãŸãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®ç¸¦å¹…
+#define DANGER_LINE 17 // å±é™ºãƒ©ã‚¤ãƒ³
 
-#define DELETED_SUM 10 // Á–Å‚Ì‚½‚ß‚Éì‚é‚×‚«˜a‚Ì’l
-#define EXPLODE 5 //”š”­ƒuƒƒbƒN
-#define FIRE_SCORE 45 //”­‰ÎƒXƒRƒA
-#define FIRE_SCORE2 105 //”­‰ÎƒXƒRƒA2
-#define EXPLODE_SCORE 50 //”š”­ƒXƒRƒA
+#define DELETED_SUM 10 // æ¶ˆæ»…ã®ãŸã‚ã«ä½œã‚‹ã¹ãå’Œã®å€¤
+#define EXPLODE 5 //çˆ†ç™ºãƒ–ãƒ­ãƒƒã‚¯
+#define FIRE_SCORE 45 //ç™ºç«ã‚¹ã‚³ã‚¢
+#define FIRE_SCORE2 45 //ç™ºç«ã‚¹ã‚³ã‚¢2
+#define EXPLODE_SCORE 50 //çˆ†ç™ºã‚¹ã‚³ã‚¢
 
-#define EMPTY 0// ‹ó‚ÌƒOƒŠƒbƒh
-#define OJAMA 11 // ‚¨×–‚ƒuƒƒbƒN
+#define EMPTY 0// ç©ºã®ã‚°ãƒªãƒƒãƒ‰
+#define OJAMA 11 // ãŠé‚ªé­”ãƒ–ãƒ­ãƒƒã‚¯
 
-#define BASE_BEAM_WIDTH 2500// ƒr[ƒ€•
-#define SEARCH_DEPTH 14 // ƒr[ƒ€ƒT[ƒ`‚Ì’Tõ‚Ì[‚³
+#define BASE_BEAM_WIDTH 2500// ãƒ“ãƒ¼ãƒ å¹…
+#define SEARCH_DEPTH 14 // ãƒ“ãƒ¼ãƒ ã‚µãƒ¼ãƒã®æ¢ç´¢ã®æ·±ã•
 
 #define X(PT) ((PT>>2)&15)
 #define ROT(PT) (PT&3)
 #define COMMAND(x,rot) ((x)<<2|(rot))
 
 /**
- * —”¶¬Ší
+ * ä¹±æ•°ç”Ÿæˆå™¨
  */
 unsigned long long xor128() {
 	static unsigned long long rx = 123456789, ry = 362436069, rz = 521288629, rw = 88675123;
@@ -117,7 +117,7 @@ Action getBestAction2(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TU
 	ll g_zoblishField[HEIGHT][WIDTH][12]);
 
 /**
- * @param [int] x xÀ•W‚Ì’l
+ * @param [int] x xåº§æ¨™ã®å€¤
  */
 inline void setPutPackLine(int x, char g_field[HEIGHT][WIDTH], char g_putPackLine[WIDTH]) {
 	int y = 1;
@@ -129,7 +129,7 @@ inline void setPutPackLine(int x, char g_field[HEIGHT][WIDTH], char g_putPackLin
 	g_putPackLine[x] = y;
 }
 /**
- * ƒuƒƒbƒN‚ğ—‰º‚³‚¹‚é‚É—‰º‚³‚¹‚éˆÊ’u‚ğXV‚·‚é
+ * ãƒ–ãƒ­ãƒƒã‚¯ã‚’è½ä¸‹ã•ã›ã‚‹æ™‚ã«è½ä¸‹ã•ã›ã‚‹ä½ç½®ã‚’æ›´æ–°ã™ã‚‹
  */
 inline void updatePutPackLine(char g_field[HEIGHT][WIDTH], char g_putPackLine[WIDTH]) {
 	for (int x = 1; x <= FIELD_WIDTH; ++x) {
@@ -137,8 +137,8 @@ inline void updatePutPackLine(char g_field[HEIGHT][WIDTH], char g_putPackLine[WI
 	}
 }
 /**
- * ƒpƒbƒNî•ñ‚ğ“Ç‚İ‚Ş
- * ‚¨×–‚‚ª‘S‚Ä‚Ì–„‚Ü‚Á‚½ó‘Ô‚ÌƒpƒbƒN‚à—pˆÓ‚µ‚Ä‚¨‚­
+ * ãƒ‘ãƒƒã‚¯æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€
+ * ãŠé‚ªé­”ãŒå…¨ã¦ã®åŸ‹ã¾ã£ãŸçŠ¶æ…‹ã®ãƒ‘ãƒƒã‚¯ã‚‚ç”¨æ„ã—ã¦ãŠã
  */
 void readPackInfo(Pack g_packs[MAX_TURN], Pack g_ojamaPacks[MAX_TURN]) {
 	fprintf(stderr, "readPackInfo =>\n");
@@ -166,10 +166,10 @@ void readPackInfo(Pack g_packs[MAX_TURN], Pack g_ojamaPacks[MAX_TURN]) {
 	}
 }
 /**
- * 1. ƒQ[ƒ€ŠJn‚Ì“ü—Íî•ñ‚ğ“Ç‚İ‚Ş
- * 2. ƒtƒB[ƒ‹ƒhî•ñ‚ğ‰Šú‰»‚µ‚Ä‚¨‚­
- * 3. zoblish hash—p‚Ì—”ƒe[ƒuƒ‹¶¬
- * 4. ƒpƒbƒNî•ñ‚Ì“Ç‚İ‚İ
+ * 1. ã‚²ãƒ¼ãƒ é–‹å§‹æ™‚ã®å…¥åŠ›æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€
+ * 2. ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±ã‚’åˆæœŸåŒ–ã—ã¦ãŠã
+ * 3. zoblish hashç”¨ã®ä¹±æ•°ãƒ†ãƒ¼ãƒ–ãƒ«ç”Ÿæˆ
+ * 4. ãƒ‘ãƒƒã‚¯æƒ…å ±ã®èª­ã¿è¾¼ã¿
  */
 void init(char g_myField[HEIGHT][WIDTH], char g_enemyField[HEIGHT][WIDTH], char g_field[HEIGHT][WIDTH]
 	, ll g_zoblishField[HEIGHT][WIDTH][12], Pack g_packs[MAX_TURN], Pack g_ojamaPacks[MAX_TURN], int* beforeTime) {
@@ -192,7 +192,7 @@ void init(char g_myField[HEIGHT][WIDTH], char g_enemyField[HEIGHT][WIDTH], char 
 	readPackInfo(g_packs, g_ojamaPacks);
 }
 /**
- * ƒ^[ƒ“–ˆ‚Ìî•ñ‚ğ“Ç‚İ‚Ş
+ * ã‚¿ãƒ¼ãƒ³æ¯ã®æƒ…å ±ã‚’èª­ã¿è¾¼ã‚€
  */
 int readTurnInfo(int* beforeTime, int* myRemainTime, int* myOjamaStock, char g_myField[HEIGHT][WIDTH]
 	, char g_enemyField[HEIGHT][WIDTH], int* g_scoreLimit, int* skillgauge, int* flag) {
@@ -200,11 +200,11 @@ int readTurnInfo(int* beforeTime, int* myRemainTime, int* myOjamaStock, char g_m
 	string _end_;
 	int ret;
 
-	// [Œ»İ‚Ìƒ^[ƒ“”]
+	// [ç¾åœ¨ã®ã‚¿ãƒ¼ãƒ³æ•°]
 	int turn;
 	cin >> turn;
 
-	// [©•ª‚Ìc‚èvlŠÔB’PˆÊ‚Íƒ~ƒŠ•b]
+	// [è‡ªåˆ†ã®æ®‹ã‚Šæ€è€ƒæ™‚é–“ã€‚å˜ä½ã¯ãƒŸãƒªç§’]
 	cin >> *myRemainTime;
 
 	fprintf(stderr, "%2d:MRT=%d,UT=%d\n", turn, *myRemainTime, *beforeTime - *myRemainTime);
@@ -213,20 +213,20 @@ int readTurnInfo(int* beforeTime, int* myRemainTime, int* myOjamaStock, char g_m
 
 	*beforeTime = *myRemainTime;
 
-	// [©•ª‚Ì‚¨×–‚ƒXƒgƒbƒN]
+	// [è‡ªåˆ†ã®ãŠé‚ªé­”ã‚¹ãƒˆãƒƒã‚¯]
 	cin >> *myOjamaStock;
 
-	//@[©•ª‚ÌƒXƒLƒ‹ƒQ[ƒW]
+	//ã€€[è‡ªåˆ†ã®ã‚¹ã‚­ãƒ«ã‚²ãƒ¼ã‚¸]
 	cin >> *skillgauge;
 
-	//@[©•ª‚ÌƒXƒRƒA]
+	//ã€€[è‡ªåˆ†ã®ã‚¹ã‚³ã‚¢]
 	int myscore;
 	cin >> myscore;
 
 	int ojamaCnt = 0;
 	int block = 0;
 
-	// [‘O‚Ìƒ^[ƒ“I—¹‚Ì©•ª‚ÌƒtƒB[ƒ‹ƒhî•ñ]
+	// [å‰ã®ã‚¿ãƒ¼ãƒ³çµ‚äº†æ™‚ã®è‡ªåˆ†ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±]
 	int t;
 	for (int y = 0; y < FIELD_HEIGHT; ++y) {
 		for (int x = 1; x <= FIELD_WIDTH; ++x) {
@@ -241,11 +241,11 @@ int readTurnInfo(int* beforeTime, int* myRemainTime, int* myOjamaStock, char g_m
 
 	cin >> _end_;
 
-	//  [‘Šè‚Ìc‚èvlŠÔB’PˆÊ‚Íƒ~ƒŠ•b]
+	//  [ç›¸æ‰‹ã®æ®‹ã‚Šæ€è€ƒæ™‚é–“ã€‚å˜ä½ã¯ãƒŸãƒªç§’]
 	int enemyRemainTime;
 	cin >> enemyRemainTime;
 
-	// [‘Šè‚Ì‚¨×–‚ƒXƒgƒbƒN]
+	// [ç›¸æ‰‹ã®ãŠé‚ªé­”ã‚¹ãƒˆãƒƒã‚¯]
 	int enemyOjamaStock;
 	cin >> enemyOjamaStock;
 
@@ -255,7 +255,7 @@ int readTurnInfo(int* beforeTime, int* myRemainTime, int* myOjamaStock, char g_m
 	int enemy_score;
 	cin >> enemy_score;
 
-	// [‘O‚Ìƒ^[ƒ“I—¹‚Ì‘Šè‚ÌƒtƒB[ƒ‹ƒhî•ñ]
+	// [å‰ã®ã‚¿ãƒ¼ãƒ³çµ‚äº†æ™‚ã®ç›¸æ‰‹ã®ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰æƒ…å ±]
 	for (int y = 0; y < FIELD_HEIGHT; ++y) {
 		for (int x = 1; x <= FIELD_WIDTH; ++x) {
 			cin >> t;
@@ -268,12 +268,12 @@ int readTurnInfo(int* beforeTime, int* myRemainTime, int* myOjamaStock, char g_m
 	}
 
 	if (block >= 70) {
-		*g_scoreLimit = 2 * EXPLODE_SCORE;//•s—˜
+		*g_scoreLimit = 2 * EXPLODE_SCORE;//ä¸åˆ©
 	}
 	else {
-		if (*flag == 1) { *g_scoreLimit = 2 * FIRE_SCORE2; }//ƒ{ƒ}[‘Îô
+		if (*flag == 1) { *g_scoreLimit = 2 * FIRE_SCORE2; }//ãƒœãƒãƒ¼å¯¾ç­–
 		else {
-			*g_scoreLimit = 2 * FIRE_SCORE;//•’Ê
+			*g_scoreLimit = 2 * FIRE_SCORE;//æ™®é€š
 		}
 	}
 
@@ -281,10 +281,10 @@ int readTurnInfo(int* beforeTime, int* myRemainTime, int* myOjamaStock, char g_m
 	return ret;
 }
 /**
- * ƒpƒbƒN‚É‚¨×–‚‚ğ–„‚ß‚Ş
+ * ãƒ‘ãƒƒã‚¯ã«ãŠé‚ªé­”ã‚’åŸ‹ã‚è¾¼ã‚€
  *
- * @param [int] turn Œ»İ‚Ìƒ^[ƒ“
- * @param [int] ojamaStock Œ»İ‚Ì‚¨×–‚‚ÌƒXƒgƒbƒN”
+ * @param [int] turn ç¾åœ¨ã®ã‚¿ãƒ¼ãƒ³
+ * @param [int] ojamaStock ç¾åœ¨ã®ãŠé‚ªé­”ã®ã‚¹ãƒˆãƒƒã‚¯æ•°
  */
 void fillOjama(int turn, int ojamaStock, Pack g_packs[MAX_TURN]) {
 	for (int t = turn; t < MAX_TURN && ojamaStock > 0; t++) {
@@ -299,10 +299,10 @@ void fillOjama(int turn, int ojamaStock, Pack g_packs[MAX_TURN]) {
 	}
 }
 /**
- * ƒuƒƒbƒN‚©‚ç‚¨×–‚‚ğæ‚èœ‚­
+ * ãƒ–ãƒ­ãƒƒã‚¯ã‹ã‚‰ãŠé‚ªé­”ã‚’å–ã‚Šé™¤ã
  *
- * @param [int] turn Œ»İ‚Ìƒ^[ƒ“
- * @param [int] ojamaStock Œ»İ‚Ì‚¨×–‚‚ÌƒXƒgƒbƒN”
+ * @param [int] turn ç¾åœ¨ã®ã‚¿ãƒ¼ãƒ³
+ * @param [int] ojamaStock ç¾åœ¨ã®ãŠé‚ªé­”ã®ã‚¹ãƒˆãƒƒã‚¯æ•°
  */
 void cleanOjama(int turn, int ojamaStock, Pack g_packs[MAX_TURN]) {
 	for (int t = turn; t < MAX_TURN && ojamaStock > 0; t++) {
@@ -317,9 +317,9 @@ void cleanOjama(int turn, int ojamaStock, Pack g_packs[MAX_TURN]) {
 	}
 }
 /**
- * ©•ª‚ÌƒxƒXƒg‚ÈƒRƒ}ƒ“ƒh‚ğ‘I‘ğ‚·‚é
+ * è‡ªåˆ†ã®ãƒ™ã‚¹ãƒˆãªã‚³ãƒãƒ³ãƒ‰ã‚’é¸æŠã™ã‚‹
  *
- * @return [Action] ˆê”Ô—Ç‚¢ƒAƒNƒVƒ‡ƒ“
+ * @return [Action] ä¸€ç•ªè‰¯ã„ã‚¢ã‚¯ã‚·ãƒ§ãƒ³
  */
 Action getMyBestAction(int turn, char g_field[HEIGHT][WIDTH], char g_myField[HEIGHT][WIDTH], int myRemainTime
 	, Pack g_packs[MAX_TURN], int g_scoreLimit, ll g_zoblishField[HEIGHT][WIDTH][12], int threshold) {
@@ -348,9 +348,9 @@ Action getMyBestAction(int turn, char g_field[HEIGHT][WIDTH], char g_myField[HEI
 	}
 }
 /**
- * AI‚ÌƒƒCƒ“‚Ìˆ—•”•ª
+ * AIã®ãƒ¡ã‚¤ãƒ³ã®å‡¦ç†éƒ¨åˆ†
  *
- * @param [int] turn Œ»İ‚Ìƒ^[ƒ“”
+ * @param [int] turn ç¾åœ¨ã®ã‚¿ãƒ¼ãƒ³æ•°
  */
 void run(int turn, int* beforeTime, int* myRemainTime, int* myOjamaStock, int* g_scoreLimit, char g_myField[HEIGHT][WIDTH]
 	, char g_enemyField[HEIGHT][WIDTH], Pack g_packs[MAX_TURN], char g_field[HEIGHT][WIDTH],
@@ -418,24 +418,24 @@ void run(int turn, int* beforeTime, int* myRemainTime, int* myOjamaStock, int* g
 	}
 }
 /**
- * ˜A½”»’è‚ª•K—v‚ÈêŠ‚Éƒ`ƒFƒbƒN‚ğs‚¤
+ * é€£é–åˆ¤å®šãŒå¿…è¦ãªå ´æ‰€ã«ãƒã‚§ãƒƒã‚¯ã‚’è¡Œã†
  *
- * @param [int] y ƒuƒƒbƒN‚ª—‰º‚µ‚½yÀ•W
- * @param [int] x ƒuƒƒbƒN‚ª—‰º‚µ‚½xÀ•W
+ * @param [int] y ãƒ–ãƒ­ãƒƒã‚¯ãŒè½ä¸‹ã—ãŸyåº§æ¨™
+ * @param [int] x ãƒ–ãƒ­ãƒƒã‚¯ãŒè½ä¸‹ã—ãŸxåº§æ¨™
  */
 void setChainCheckId(int y, int x, char g_chainCheck[HEIGHT][WIDTH]) {
 	g_chainCheck[y][x] = 1;
 }
 /**
- * w’è‚µ‚½xÀ•W‚ÉƒpƒbƒN‚Ìˆê•”‚ğ—‚Æ‚· (‰º‚Ì‚æ‚¤‚ÈŠ´‚¶‚Å—‚Æ‚·)
+ * æŒ‡å®šã—ãŸxåº§æ¨™ã«ãƒ‘ãƒƒã‚¯ã®ä¸€éƒ¨ã‚’è½ã¨ã™ (ä¸‹ã®ã‚ˆã†ãªæ„Ÿã˜ã§è½ã¨ã™)
  *
  *    t0 t1 t2
  *
- * @param [int] x xÀ•W
- * @param [int] t0 ƒpƒbƒN‚ÌƒuƒƒbƒN‚Ì’l
- * @param [int] t1 ƒpƒbƒN‚ÌƒuƒƒbƒN‚Ì’l
- * @param [int] t2 ƒpƒbƒN‚ÌƒuƒƒbƒN‚Ì’l
- * @param [bool] İ’u‰Â”\‚©‚Ç‚¤‚©
+ * @param [int] x xåº§æ¨™
+ * @param [int] t0 ãƒ‘ãƒƒã‚¯ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å€¤
+ * @param [int] t1 ãƒ‘ãƒƒã‚¯ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å€¤
+ * @param [int] t2 ãƒ‘ãƒƒã‚¯ã®ãƒ–ãƒ­ãƒƒã‚¯ã®å€¤
+ * @param [bool] è¨­ç½®å¯èƒ½ã‹ã©ã†ã‹
  */
 bool putLinePack(int x, int t0, int t1, char g_putPackLine[WIDTH], char g_field[HEIGHT][WIDTH],
 	char g_chainCheck[HEIGHT][WIDTH]) {
@@ -463,12 +463,12 @@ bool putLinePack(int x, int t0, int t1, char g_putPackLine[WIDTH], char g_field[
 	return true;
 }
 /**
- * ƒpƒbƒN‚ğİ’u‚·‚éˆ—
+ * ãƒ‘ãƒƒã‚¯ã‚’è¨­ç½®ã™ã‚‹å‡¦ç†
  *
- * @param [int] x İ’u‚·‚éxÀ•W
- * @param [int] rot ‰ñ“]”
- * @param [Pack] pack ƒpƒbƒNî•ñ
- * @return [bool] İ’u‚ª¬Œ÷‚µ‚½‚©‚Ç‚¤‚©
+ * @param [int] x è¨­ç½®ã™ã‚‹xåº§æ¨™
+ * @param [int] rot å›è»¢æ•°
+ * @param [Pack] pack ãƒ‘ãƒƒã‚¯æƒ…å ±
+ * @return [bool] è¨­ç½®ãŒæˆåŠŸã—ãŸã‹ã©ã†ã‹
  */
 bool putPack(int x, int rot, const Pack& pack, char g_putPackLine[WIDTH], char g_field[HEIGHT][WIDTH]
 	, char g_chainCheck[HEIGHT][WIDTH]) {
@@ -498,7 +498,7 @@ bool putPack(int x, int rot, const Pack& pack, char g_putPackLine[WIDTH], char g
 	return success;
 }
 /**
- * ƒtƒB[ƒ‹ƒh‚ÌÅ‘å‚Ì‚‚³‚ğXV‚·‚é
+ * ãƒ•ã‚£ãƒ¼ãƒ«ãƒ‰ã®æœ€å¤§ã®é«˜ã•ã‚’æ›´æ–°ã™ã‚‹
  */
 inline void updateMaxHeight(int* g_maxHeight, char g_putPackLine[WIDTH]) {
 	*g_maxHeight = 0;
@@ -531,7 +531,7 @@ void deleteCheck(int y, int x, char g_field[HEIGHT][WIDTH], char g_packDeleteChe
 	*g_deleteCount = tmp;
 }
 /**
- * ˜A½”»’è‚ğs‚¤
+ * é€£é–åˆ¤å®šã‚’è¡Œã†
  */
 void chainPack(int* g_deleteCount, int g_maxHeight, char g_field[HEIGHT][WIDTH], char g_packDeleteChecker[HEIGHT][WIDTH]
 	, char g_chainCheck[HEIGHT][WIDTH]) {
@@ -547,7 +547,7 @@ void chainPack(int* g_deleteCount, int g_maxHeight, char g_field[HEIGHT][WIDTH],
 	}
 }
 /**
- * ƒpƒbƒN‚Ì—‰ºˆ—‚Æíœˆ—‚ğs‚¤
+ * ãƒ‘ãƒƒã‚¯ã®è½ä¸‹å‡¦ç†ã¨å‰Šé™¤å‡¦ç†ã‚’è¡Œã†
  */
 void fallPack(char g_field[HEIGHT][WIDTH], char g_putPackLine[WIDTH], char g_packDeleteChecker[HEIGHT][WIDTH],
 	char g_chainCheck[HEIGHT][WIDTH]) {
@@ -573,9 +573,9 @@ void fallPack(char g_field[HEIGHT][WIDTH], char g_putPackLine[WIDTH], char g_pac
 }
 
 /**
- * ˜A½ˆ—‚ÌƒVƒ~ƒ…ƒŒ[ƒVƒ‡ƒ“‚ğs‚¤
+ * é€£é–å‡¦ç†ã®ã‚·ãƒŸãƒ¥ãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã‚’è¡Œã†
  *
- * @return [int] ƒXƒRƒA
+ * @return [int] ã‚¹ã‚³ã‚¢
  */
 int simulate(int* g_maxHeight, char g_putPackLine[WIDTH], char g_field[HEIGHT][WIDTH], char g_packDeleteChecker[HEIGHT][WIDTH],
 	char g_chainCheck[HEIGHT][WIDTH]) {
@@ -713,8 +713,6 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 		//}
 	}
 
-	/*
-
 	double avg[10][2] = { 0 };
 	double cnt[10] = { 0 };
 
@@ -727,8 +725,6 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 			}
 		}
 	}
-
-
 
 	double add = 0;
 
@@ -748,11 +744,9 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 		add += max(avg[i][1] - avg[10 - i][1], avg[10 - i][1] - avg[i][1]);
 	}
 
-	add *= 0.5;
+	add *= 0.1;
 
 	maxValue -= (int)add;
-
-	*/
 
 	return maxValue;
 }
@@ -857,10 +851,10 @@ int skill_chain(char field[HEIGHT][WIDTH]) {
 }
 
 /**
- * ˆê”Ô—Ç‚¢‘€ì‚ğæ“¾‚·‚é
+ * ä¸€ç•ªè‰¯ã„æ“ä½œã‚’å–å¾—ã™ã‚‹
  *
- * @param [int] turn ¡Œ»İ‚Ìƒ^[ƒ“
- * @return [Action] ˆê”ÔƒxƒXƒg‚Ès“®î•ñ
+ * @param [int] turn ä»Šç¾åœ¨ã®ã‚¿ãƒ¼ãƒ³
+ * @return [Action] ä¸€ç•ªãƒ™ã‚¹ãƒˆãªè¡Œå‹•æƒ…å ±
  */
 Action getBestAction(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TURN], int g_scoreLimit, int BEAM_WIDTH,
 	ll g_zoblishField[HEIGHT][WIDTH][12], int threshold) {
