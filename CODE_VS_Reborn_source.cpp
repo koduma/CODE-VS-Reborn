@@ -713,40 +713,31 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 		//}
 	}
 
-	double avg[10][2] = { 0 };
-	double cnt[10] = { 0 };
+	int friend_x_pos[FIELD_WIDTH + 1][OJAMA] = { 0 };
 
 	for (int y = 1; y <= FIELD_HEIGHT; y++) {
 		for (int x = 1; x <= FIELD_WIDTH; x++) {
 			if (EMPTY < g_field[y][x] && g_field[y][x] < OJAMA) {
-				avg[g_field[y][x]][0] += (double)y;
-				avg[g_field[y][x]][1] += (double)x;
-				cnt[g_field[y][x]] += 1.0;
+				friend_x_pos[x][g_field[y][x]]++;
 			}
 		}
 	}
 
-	double add = 0;
+	int add = 0;
 
-	for (int i = 1; i <= 4; i++) {
-		if (cnt[i] > 0) {
-			avg[i][0] /= cnt[i];
-			avg[i][1] /= cnt[i];
-		}
-		if (cnt[10 - i] > 0) {
-			avg[10 - i][0] /= cnt[10 - i];
-			avg[10 - i][1] /= cnt[10 - i];
+	for (int i = 1; i <= 5; i++) {
+		for (int x = 1; x <= FIELD_WIDTH; x++) {
+				if (2 <= x) {
+					add += min(friend_x_pos[x][i], friend_x_pos[x - 1][10 - i]);
+				}
+				if (x <= FIELD_WIDTH - 1) {
+					add += min(friend_x_pos[x][i], friend_x_pos[x + 1][10 - i]);
+				}
+				add += min(friend_x_pos[x][i], friend_x_pos[x][10 - i]);
 		}
 	}
 
-	for (int i = 1; i <= 4; i++) {
-		add += max(avg[i][0] - avg[10 - i][0], avg[10 - i][0] - avg[i][0]);
-		add += max(avg[i][1] - avg[10 - i][1], avg[10 - i][1] - avg[i][1]);
-	}
-
-	add *= 0.1;
-
-	maxValue -= (int)add;
+	maxValue += add / 2;
 
 	return maxValue;
 }
