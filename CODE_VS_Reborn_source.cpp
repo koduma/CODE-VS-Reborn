@@ -737,7 +737,7 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 		}
 	}
 
-	maxValue += add / 2;
+	maxValue += add * 2;
 
 	return maxValue;
 }
