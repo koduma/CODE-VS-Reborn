@@ -713,7 +713,7 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 		//}
 	}
 
-	int friend_x_pos[FIELD_WIDTH + 1][OJAMA] = { 0 };
+	char friend_x_pos[FIELD_WIDTH + 1][OJAMA] = { 0 };
 
 	for (int y = 1; y <= FIELD_HEIGHT; y++) {
 		for (int x = 1; x <= FIELD_WIDTH; x++) {
@@ -725,15 +725,20 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 
 	int add = 0;
 
+	char c;
+
 	for (int i = 1; i <= 5; i++) {
 		for (int x = 1; x <= FIELD_WIDTH; x++) {
 				if (2 <= x) {
-					add += min(friend_x_pos[x][i], friend_x_pos[x - 1][10 - i]);
+					c = min(friend_x_pos[x][i], friend_x_pos[x - 1][10 - i]);
+					add += (int)c;
 				}
 				if (x <= FIELD_WIDTH - 1) {
-					add += min(friend_x_pos[x][i], friend_x_pos[x + 1][10 - i]);
+					c = min(friend_x_pos[x][i], friend_x_pos[x + 1][10 - i]);
+					add += (int)c;
 				}
-				add += min(friend_x_pos[x][i], friend_x_pos[x][10 - i]);
+				c = min(friend_x_pos[x][i], friend_x_pos[x][10 - i]);
+				add += (int)c;
 		}
 	}
 
