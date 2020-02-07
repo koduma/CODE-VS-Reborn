@@ -1058,7 +1058,7 @@ Action getBestAction2(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TU
 		vector<pair<int, int> >vec;
 		int ks2=0;
 		for (int j = 0; j < 36 * ks; j++) {
-			if(fff[j].score!=114514){
+			if(fff[j].score!=-114514){
 			vec.push_back(make_pair(fff[j].value, j));
 			ks2++;
 			}
