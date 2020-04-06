@@ -714,9 +714,13 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 	}
 
 	char friend_x_pos[FIELD_WIDTH + 1][OJAMA] = { 0 };
-
-	for (int y = 1; y <= FIELD_HEIGHT; y++) {
+	
 		for (int x = 1; x <= FIELD_WIDTH; x++) {
+		
+		int limit_y=(int)g_tempPutPackLine[x];
+		
+		for(int y=1;y<limit_y;y++){
+		
 			if (EMPTY < g_field[y][x] && g_field[y][x] < OJAMA) {
 				friend_x_pos[x][g_field[y][x]]++;
 			}
@@ -729,16 +733,16 @@ int evaluate2(int* g_maxHeight, char g_field[HEIGHT][WIDTH], char g_putPackLine[
 
 	for (int i = 1; i <= 5; i++) {
 		for (int x = 1; x <= FIELD_WIDTH; x++) {
-				if (2 <= x) {
-					c = min(friend_x_pos[x][i], friend_x_pos[x - 1][10 - i]);
-					add += (int)c;
-				}
-				if (x <= FIELD_WIDTH - 1) {
-					c = min(friend_x_pos[x][i], friend_x_pos[x + 1][10 - i]);
-					add += (int)c;
-				}
-				c = min(friend_x_pos[x][i], friend_x_pos[x][10 - i]);
+			if (2 <= x) {
+				c = min(friend_x_pos[x][i], friend_x_pos[x - 1][10 - i]);
 				add += (int)c;
+			}
+			if (x <= FIELD_WIDTH - 1) {
+				c = min(friend_x_pos[x][i], friend_x_pos[x + 1][10 - i]);
+				add += (int)c;
+			}
+			c = min(friend_x_pos[x][i], friend_x_pos[x][10 - i]);
+			add += (int)c;
 		}
 	}
 
@@ -918,15 +922,15 @@ Action getBestAction(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TUR
 							fff[(36 * k) + (4 * x) + rot] = cand;
 						}
 						else {
-							cand.value = -114514;
-							cand.score = -114514;
+							cand.value = -1;
+							cand.score = -1;
 							fff[(36 * k) + (4 * x) + rot] = cand;
 						}
 					}
 					else {
 						Node cand2;
-						cand2.value = -114514;
-						cand2.score = -114514;
+						cand2.value = -1;
+						cand2.score = -1;
 						fff[(36 * k) + (4 * x) + rot] = cand2;
 					}
 					memcpy(g_tempfield, node.field, sizeof(node.field));
@@ -936,18 +940,17 @@ Action getBestAction(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TUR
 		}
 		que.clear();
 		vector<pair<int, int> >vec;
-		int ks2=0;
+		int ks2 = 0;
 		for (int j = 0; j < 36 * ks; j++) {
-			if(fff[j].score!=-114514){
-			vec.push_back(make_pair(fff[j].value, j));
-			ks2++;
+			if (fff[j].score != -1) {
+				vec.push_back(make_pair(fff[j].value, j));
+				ks2++;
 			}
 		}
-		sort(vec.begin(), vec.end(), greater<>());
-		for (int j = 0; j < BEAM_WIDTH && j < ks2; j++) {
-			Node node = fff[vec[j].second];
-
-			if (node.score == -114514) { continue; }
+		sort(vec.begin(), vec.end());
+		int push_node=0;
+		for (int j = 0; push_node < BEAM_WIDTH && j < ks2; j++) {
+			Node node = fff[vec[ks2-1-j].second];
 
 			if (node.value >= g_scoreLimit) {
 				return Action(node.command, node.value, turn + depth);
@@ -964,6 +967,7 @@ Action getBestAction(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TUR
 				if (!checkNodeList[hash] && (!node.chain || (update == 0 && node.score <= 2))) {
 					checkNodeList[hash] = true;
 					que.push_back(node);
+					push_node++;
 				}
 			}
 		}
@@ -1038,15 +1042,15 @@ Action getBestAction2(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TU
 							fff[(36 * k) + (4 * x) + rot] = cand;
 						}
 						else {
-							cand.value = -114514;
-							cand.score = -114514;
+							cand.value = -1;
+							cand.score = -1;
 							fff[(36 * k) + (4 * x) + rot] = cand;
 						}
 					}
 					else {
 						Node cand2;
-						cand2.value = -114514;
-						cand2.score = -114514;
+						cand2.value = -1;
+						cand2.score = -1;
 						fff[(36 * k) + (4 * x) + rot] = cand2;
 					}
 					memcpy(g_tempfield, node.field, sizeof(node.field));
@@ -1056,18 +1060,17 @@ Action getBestAction2(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TU
 		}
 		que.clear();
 		vector<pair<int, int> >vec;
-		int ks2=0;
+		int ks2 = 0;
 		for (int j = 0; j < 36 * ks; j++) {
-			if(fff[j].score!=-114514){
-			vec.push_back(make_pair(fff[j].value, j));
-			ks2++;
+			if (fff[j].score != -1) {
+				vec.push_back(make_pair(fff[j].value, j));
+				ks2++;
 			}
 		}
-		sort(vec.begin(), vec.end(), greater<>());
-		for (int j = 0; j < BEAM_WIDTH && j < ks2; j++) {
-			Node node = fff[vec[j].second];
-
-			if (node.score == -114514) { continue; }
+		sort(vec.begin(), vec.end());
+		int push_node=0;
+		for (int j = 0; push_node < BEAM_WIDTH && j < ks2; j++) {
+			Node node = fff[vec[ks2-1-j].second];
 
 			if (node.score >= g_scoreLimit) {
 				return Action(node.command, node.score, turn + depth);
@@ -1084,6 +1087,7 @@ Action getBestAction2(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TU
 				if (!checkNodeList[hash] && (!node.chain || (update == 0 && node.score <= 2))) {
 					checkNodeList[hash] = true;
 					que.push_back(node);
+					push_node++;
 				}
 			}
 		}
@@ -1094,7 +1098,7 @@ Action getBestAction2(int turn, char g_field[HEIGHT][WIDTH], Pack g_packs[MAX_TU
 
 int main() {
 
-	cout << "tekitouk" << endl;
+	cout << "tekitouk_mingw" << endl;
 
 	int beforeTime;
 	int myRemainTime;
